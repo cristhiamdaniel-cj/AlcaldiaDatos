@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='kennedy.jpg') }}" alt="Kennedy">
+        <h1>Registro de Personal - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Actualizar Registro</h2>
+        <form action="" method="post">
+            {% for key, value in record.items() %}
+            <label>{{ key }}: <input type="text" name="{{ key }}" value="{{ value }}"></label><br>
+            {% endfor %}
+            <button type="submit">Actualizar</button>
+        </form>
+        <a href="/read">Cancelar</a>
+    </div>
+</body>
+</html>

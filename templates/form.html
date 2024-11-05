@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registro de Personal - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Crear Nuevo Registro</h2>
+        <form action="/" method="post">
+            <!-- Datos Personales -->
+            <h3>Datos Personales</h3>
+            <label>Número: <input type="text" name="No." required></label>
+            <label>Nombre Completo: <input type="text" name="NOMBRE COMPLETO" required></label>
+            <label>Identificación: <input type="text" name="IDENTIFICACION" required></label>
+            <label>Teléfono: <input type="text" name="TELEFONO"></label>
+
+            <!-- Perfil Profesional -->
+            <h3>Perfil Profesional</h3>
+            <label>Perfil: <input type="text" name="PERFIL"></label>
+            <label>HV (Enlace): <input type="url" name="HV"></label>
+            <label>Área: <input type="text" name="AREA"></label>
+            <label>Subgrupo: <input type="text" name="SUBGRUPO"></label>
+            <label>Rol: <input type="text" name="ROL"></label>
+
+            <!-- Proceso de Contratación -->
+            <h3>Proceso de Contratación</h3>
+            <label>Fecha Entrevista: <input type="date" name="FECHA ENTREVISTA"></label>
+            <label>Estado del Proceso: <input type="text" name="ESTADO DEL PROCESO"></label>
+            <label>Notas: <input type="text" name="NOTAS"></label>
+            <label>Tipo de Movimiento: <input type="text" name="TIPO DE MOVIMIENTO"></label>
+
+            <!-- Información del Contrato -->
+            <h3>Información del Contrato</h3>
+            <label>Fecha de Vencimiento: <input type="date" name="Fecha de vencimiento"></label>
+            <label>CDP: <input type="text" name="CDP"></label>
+            <label>CRP: <input type="text" name="CRP"></label>
+            <label>A Contratación: <input type="text" name="A CONTRATACION"></label>
+            <label>Fecha de Terminación Contrato: <input type="date" name="FECHA DE TERMINACIÓN CONTRATO"></label>
+            <label>Fecha de Inicio: <input type="date" name="FECHA DE INICIO"></label>
+            <label>Fecha de Terminación: <input type="date" name="FECHA DE TERMINACIÓN"></label>
+
+            <button type="submit">Guardar</button>
+        </form>
+        <a href="/read">Ver todos los registros</a>
+    </div>
+</body>
+</html>

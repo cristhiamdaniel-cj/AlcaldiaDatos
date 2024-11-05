@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Registros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registro de Personal - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Registros</h2>
+
+        {% if data %}
+            <table>
+                <tr>
+                    {% for col in data[0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                    <th>Acciones</th>
+                </tr>
+                {% for row in data %}
+                <tr>
+                    {% for col in row.values() %}
+                    <td>{{ col }}</td>
+                    {% endfor %}
+                    <td>
+                        <a href="{{ url_for('update', index=loop.index0) }}">Editar</a> |
+                        <a href="{{ url_for('delete', index=loop.index0) }}">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>{{ message }}</p>
+        {% endif %}
+
+        <a href="/">Agregar Nuevo Registro</a>
+    </div>
+</body>
+</html>
