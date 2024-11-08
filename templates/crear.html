@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Crear Nuevo Registro - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Formulario de Registro</h2>
+        <form action="{{ url_for('crear_registro') }}" method="post">
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required>
+
+            <label for="nombres">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" required>
+
+            <label for="identificacion">Identificación:</label>
+            <input type="text" id="identificacion" name="identificacion" required>
+
+            <label for="fecha_entrevista">Fecha de Entrevista:</label>
+            <input type="date" id="fecha_entrevista" name="fecha_entrevista">
+
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono">
+
+            <label for="perfil">Perfil:</label>
+            <input type="text" id="perfil" name="perfil">
+
+            <label for="hv">HV (Enlace):</label>
+            <input type="url" id="hv" name="hv">
+
+            <label for="area">Área:</label>
+            <select id="area" name="area" required>
+                <option value="">Seleccione un Área</option>
+                <option value="Despacho">Despacho</option>
+                <option value="Desarrollo Administrativo y Financiero">Desarrollo Administrativo y Financiero</option>
+                <option value="Gestión Policiva y Jurídica">Gestión Policiva y Jurídica</option>
+                <option value="Inspecciones de Policía">Inspecciones de Policía</option>
+            </select>
+
+            <label for="subgrupo">Subgrupo:</label>
+            <select id="subgrupo" name="subgrupo" required>
+                <option value="">Seleccione un Subgrupo</option>
+                <!-- Subgrupos dependientes del área seleccionada -->
+            </select>
+
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol" required>
+                <option value="">Seleccione un Rol</option>
+                <option value="Auxiliar">Auxiliar</option>
+                <option value="Notificador">Notificador</option>
+                <option value="Primaria">Primaria</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Técnico">Técnico</option>
+                <option value="Transporte - Liviano">Transporte - Liviano</option>
+                <option value="Transporte - Pesado">Transporte - Pesado</option>
+            </select>
+
+            <label for="riesgo">Riesgo:</label>
+            <input type="text" id="riesgo" name="riesgo">
+
+            <button type="submit">Guardar Registro</button>
+        </form>
+
+        <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
+    </div>
+
+    <script>
+        // Script para actualizar las opciones de subgrupo en función del área seleccionada
+        document.addEventListener("DOMContentLoaded", function () {
+            const areaSelect = document.getElementById("area");
+            const subgrupoSelect = document.getElementById("subgrupo");
+
+            const jerarquia = {
+                "Despacho": ["1.01 Despacho", "1.02 Desarrollo Estratégico y Mejora", "1.03 Jurídica"],
+                "Desarrollo Administrativo y Financiero": ["2.01 Coordinación Administrativa", "2.02 PIGA"],
+                "Gestión Policiva y Jurídica": ["3.1 Coordinación Policiva", "3.2 Actuaciones Administrativas"],
+                "Inspecciones de Policía": ["4.1 Coordinación", "4.2 Inspección - 8A", "4.2 Inspección - 8B"]
+            };
+
+            areaSelect.addEventListener("change", function () {
+                const area = areaSelect.value;
+                const subgrupos = jerarquia[area] || [];
+
+                subgrupoSelect.innerHTML = "<option value=''>Seleccione un Subgrupo</option>";
+                subgrupos.forEach(subgrupo => {
+                    const option = document.createElement("option");
+                    option.value = subgrupo;
+                    option.textContent = subgrupo;
+                    subgrupoSelect.appendChild(option);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,52 +1,35 @@
-/* Configuración general del fondo */
+/* Configuración general */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-image: url('../static/kennedy.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    color: #333;
+    background-color: #f0f0f5;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    color: #333;
 }
 
 /* Contenedor principal */
 .container {
     width: 90%;
     max-width: 800px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     margin: 20px auto;
-    overflow-x: auto; /* Permite desplazamiento horizontal dentro del contenedor */
+    overflow-x: auto;
 }
 
 /* Encabezado */
-header {
-    position: sticky;
-    top: 0;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px 0;
-    z-index: 10;
-    text-align: center;
-}
-
-header h1 {
+h2 {
     color: #d32f2f;
-    font-size: 28px;
-    margin: 0;
-}
-
-/* Títulos */
-h2, h3 {
-    color: #d32f2f;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 /* Formulario */
@@ -54,6 +37,7 @@ form label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
+    text-align: left;
 }
 
 input[type="text"], input[type="url"], input[type="date"], input[type="tel"], input[type="number"], select {
@@ -66,6 +50,7 @@ input[type="text"], input[type="url"], input[type="date"], input[type="tel"], in
     box-sizing: border-box;
 }
 
+/* Ajustes para el botón de volver al menú */
 button {
     background-color: #d32f2f;
     color: white;
@@ -74,20 +59,25 @@ button {
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
-    width: 100%;
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #b71c1c;
 }
 
-/* Tablas */
+/* Ajuste para el formulario y tabla */
+form label, table th, table td {
+    text-align: left;
+    font-weight: bold;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    min-width: 900px; /* Establece un ancho mínimo para que el contenido de la tabla no se desborde */
 }
+
 
 table, th, td {
     border: 1px solid #ddd;
@@ -95,29 +85,43 @@ table, th, td {
     text-align: left;
 }
 
-th, td {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-}
-
 th {
     background-color: #d32f2f;
     color: white;
+    font-weight: bold;
 }
 
-/* Ajuste de scroll horizontal */
-.container {
-    overflow-x: auto;
-}
-
-/* Links */
-a {
+td a {
     color: #d32f2f;
     text-decoration: none;
     font-weight: bold;
 }
 
-a:hover {
+td a:hover {
     text-decoration: underline;
+}
+
+/* Mensajes flash */
+.flash {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.flash.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
 }
 
 /* Responsividad */
@@ -127,7 +131,7 @@ a:hover {
         padding: 15px;
     }
 
-    header h1 {
+    h2 {
         font-size: 20px;
     }
 
@@ -138,12 +142,16 @@ a:hover {
 }
 
 @media (max-width: 480px) {
-    header h1 {
+    h2 {
         font-size: 18px;
     }
 
     button {
         font-size: 12px;
         padding: 6px 10px;
+    }
+
+    table {
+        font-size: 12px;
     }
 }

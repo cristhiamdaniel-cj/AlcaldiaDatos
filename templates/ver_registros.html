@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ver Registros de Personal</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registros de Personal - Alcaldía Local de Kennedy</h1>
+    </header>
+
+    <div class="container">
+        <h2>Lista de Registros</h2>
+
+        <!-- Selección de cantidad de registros a mostrar -->
+        <div class="controls">
+            <label for="record_count">Mostrar:</label>
+            <select id="record_count" onchange="changeRecordCount()">
+                <option value="10" {% if count == 10 %}selected{% endif %}>10 registros</option>
+                <option value="50" {% if count == 50 %}selected{% endif %}>50 registros</option>
+                <option value="100" {% if count == 100 %}selected{% endif %}>100 registros</option>
+                <option value="all" {% if count == 'all' %}selected{% endif %}>Todos</option>
+            </select>
+        </div>
+
+        <!-- Tabla de registros -->
+        {% if registros %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Nombres</th>
+                        <th>Identificación</th>
+                        <th>Fecha de Entrevista</th>
+                        <th>Teléfono</th>
+                        <th>Perfil</th>
+                        <th>HV</th>
+                        <th>Área</th>
+                        <th>Subgrupo</th>
+                        <th>Rol</th>
+                        <th>Riesgo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros %}
+                    <tr>
+                        <td>{{ registro.id }}</td>
+                        <td>{{ registro.apellido_paterno }}</td>
+                        <td>{{ registro.apellido_materno }}</td>
+                        <td>{{ registro.nombres }}</td>
+                        <td>{{ registro.identificacion }}</td>
+                        <td>{{ registro.fecha_entrevista }}</td>
+                        <td>{{ registro.telefono }}</td>
+                        <td>{{ registro.perfil }}</td>
+                        <td><a href="{{ registro.hv }}" target="_blank">Ver HV</a></td>
+                        <td>{{ registro.area }}</td>
+                        <td>{{ registro.subgrupo }}</td>
+                        <td>{{ registro.rol }}</td>
+                        <td>{{ registro.riesgo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay registros disponibles.</p>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}" class="back-button">Volver al Menú</a>
+    </div>
+
+    <script>
+        function changeRecordCount() {
+            const count = document.getElementById('record_count').value;
+            window.location.href = `{{ url_for('ver_registros') }}?count=${count}`;
+        }
+    </script>
+</body>
+</html>

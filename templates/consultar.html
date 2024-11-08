@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Consultar Registro - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Buscar Registro por Identificación</h2>
+        <form action="{{ url_for('consultar_registro') }}" method="post">
+            <label for="identificacion">Identificación:</label>
+            <input type="text" id="identificacion" name="identificacion" required>
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% if registro %}
+            <h3>Información del Registro</h3>
+            <table>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+                <tr>
+                    <td>Apellido Paterno</td>
+                    <td>{{ registro.apellido_paterno }}</td>
+                </tr>
+                <tr>
+                    <td>Apellido Materno</td>
+                    <td>{{ registro.apellido_materno }}</td>
+                </tr>
+                <tr>
+                    <td>Nombres</td>
+                    <td>{{ registro.nombres }}</td>
+                </tr>
+                <tr>
+                    <td>Identificación</td>
+                    <td>{{ registro.identificacion }}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de Entrevista</td>
+                    <td>{{ registro.fecha_entrevista }}</td>
+                </tr>
+                <tr>
+                    <td>Teléfono</td>
+                    <td>{{ registro.telefono }}</td>
+                </tr>
+                <tr>
+                    <td>Perfil</td>
+                    <td>{{ registro.perfil }}</td>
+                </tr>
+                <tr>
+                    <td>HV (Enlace)</td>
+                    <td><a href="{{ registro.hv }}" target="_blank">Ver HV</a></td>
+                </tr>
+                <tr>
+                    <td>Área</td>
+                    <td>{{ registro.area }}</td>
+                </tr>
+                <tr>
+                    <td>Subgrupo</td>
+                    <td>{{ registro.subgrupo }}</td>
+                </tr>
+                <tr>
+                    <td>Rol</td>
+                    <td>{{ registro.rol }}</td>
+                </tr>
+                <tr>
+                    <td>Riesgo</td>
+                    <td>{{ registro.riesgo }}</td>
+                </tr>
+            </table>
+        {% elif registro is not none %}
+            <p>No se encontró ningún registro con esa identificación.</p>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
+    </div>
+</body>
+</html>

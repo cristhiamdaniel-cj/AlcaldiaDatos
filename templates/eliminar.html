@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Eliminar Registro - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Confirmar Eliminación</h2>
+        <p>¿Estás seguro de que deseas eliminar el siguiente registro?</p>
+
+        <table>
+            <tr>
+                <th>Campo</th>
+                <th>Valor</th>
+            </tr>
+            {% for key, value in registro.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <form action="{{ url_for('eliminar_registro', identificacion=registro['identificacion']) }}" method="post">
+            <button type="submit" class="button-danger">Eliminar</button>
+            <a href="{{ url_for('home') }}" class="button">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

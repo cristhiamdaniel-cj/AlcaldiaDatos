@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Actualizar Registro - Alcaldía Local de Kennedy</h1>
+    </header>
+    <div class="container">
+        <h2>Actualizar Información</h2>
+        <form action="{{ url_for('actualizar_registro', identificacion=registro.identificacion) }}" method="post">
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" value="{{ registro.apellido_paterno }}" required>
+
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" value="{{ registro.apellido_materno }}" required>
+
+            <label for="nombres">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" value="{{ registro.nombres }}" required>
+
+            <label for="identificacion">Identificación:</label>
+            <input type="text" id="identificacion" name="identificacion" value="{{ registro.identificacion }}" disabled>
+
+            <label for="fecha_entrevista">Fecha de Entrevista:</label>
+            <input type="date" id="fecha_entrevista" name="fecha_entrevista" value="{{ registro.fecha_entrevista }}">
+
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" value="{{ registro.telefono }}">
+
+            <label for="perfil">Perfil:</label>
+            <input type="text" id="perfil" name="perfil" value="{{ registro.perfil }}">
+
+            <label for="hv">HV (Enlace):</label>
+            <input type="url" id="hv" name="hv" value="{{ registro.hv }}">
+
+            <label for="area">Área:</label>
+            <select id="area" name="area" required>
+                <option value="">Seleccione un Área</option>
+                <option value="Despacho" {% if registro.area == 'Despacho' %}selected{% endif %}>Despacho</option>
+                <option value="Desarrollo Administrativo y Financiero" {% if registro.area == 'Desarrollo Administrativo y Financiero' %}selected{% endif %}>Desarrollo Administrativo y Financiero</option>
+                <option value="Gestión Policiva y Jurídica" {% if registro.area == 'Gestión Policiva y Jurídica' %}selected{% endif %}>Gestión Policiva y Jurídica</option>
+                <option value="Inspecciones de Policía" {% if registro.area == 'Inspecciones de Policía' %}selected{% endif %}>Inspecciones de Policía</option>
+            </select>
+
+            <label for="subgrupo">Subgrupo:</label>
+            <input type="text" id="subgrupo" name="subgrupo" value="{{ registro.subgrupo }}">
+
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol" required>
+                <option value="">Seleccione un Rol</option>
+                <option value="Auxiliar" {% if registro.rol == 'Auxiliar' %}selected{% endif %}>Auxiliar</option>
+                <option value="Notificador" {% if registro.rol == 'Notificador' %}selected{% endif %}>Notificador</option>
+                <option value="Primaria" {% if registro.rol == 'Primaria' %}selected{% endif %}>Primaria</option>
+                <option value="Profesional Especializado" {% if registro.rol == 'Profesional Especializado' %}selected{% endif %}>Profesional Especializado</option>
+                <option value="Profesional Universitario" {% if registro.rol == 'Profesional Universitario' %}selected{% endif %}>Profesional Universitario</option>
+                <option value="Técnico" {% if registro.rol == 'Técnico' %}selected{% endif %}>Técnico</option>
+                <option value="Transporte - Liviano" {% if registro.rol == 'Transporte - Liviano' %}selected{% endif %}>Transporte - Liviano</option>
+                <option value="Transporte - Pesado" {% if registro.rol == 'Transporte - Pesado' %}selected{% endif %}>Transporte - Pesado</option>
+            </select>
+
+            <label for="riesgo">Riesgo:</label>
+            <input type="text" id="riesgo" name="riesgo" value="{{ registro.riesgo }}">
+
+            <!-- Confirmación antes de enviar -->
+            <button type="button" onclick="confirmarActualizacion()">Actualizar Registro</button>
+            <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
+        </form>
+    </div>
+
+    <script>
+        function confirmarActualizacion() {
+            if (confirm("¿Está seguro de que desea actualizar este registro?")) {
+                document.querySelector("form").submit();
+            }
+        }
+    </script>
+</body>
+</html>

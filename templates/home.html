@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Menú Principal - Sistema de Registro</h1>
+    </header>
+    <div class="container">
+        <h2>Opciones CRUD</h2>
+        <div class="menu-buttons">
+            <a href="{{ url_for('ver_registros') }}"><button>Ver Registros</button></a>
+            <a href="{{ url_for('consultar_registro') }}"><button>Consultar</button></a>
+            <a href="{{ url_for('actualizar_registro') }}"><button>Actualizar</button></a>
+            <a href="{{ url_for('eliminar_registro') }}"><button>Eliminar</button></a>
+            <a href="{{ url_for('crear_registro') }}"><button>Crear Registro</button></a>
+        </div>
+        <div class="logout">
+            <a href="{{ url_for('logout') }}"><button>Cerrar Sesión</button></a>
+        </div>
+    </div>
+</body>
+</html>
