@@ -32,6 +32,32 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Contenedor de botones */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Botones de menú */
+.button-container a button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    flex: 1 1 200px;
+    max-width: 200px;
+}
+
+.button-container a button:hover {
+    background-color: #b71c1c;
+}
+
 /* Formulario */
 form label {
     display: block;
@@ -40,17 +66,16 @@ form label {
     text-align: left;
 }
 
-input[type="text"], input[type="url"], input[type="date"], input[type="tel"], input[type="number"], select {
+input[type="text"], input[type="url"], input[type="date"], input[type="tel"], select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box;
 }
 
-/* Ajustes para el botón de volver al menú */
+/* Ajustes para botones */
 button {
     background-color: #d32f2f;
     color: white;
@@ -59,46 +84,10 @@ button {
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
-    margin-top: 10px;
 }
 
 button:hover {
     background-color: #b71c1c;
-}
-
-/* Ajuste para el formulario y tabla */
-form label, table th, table td {
-    text-align: left;
-    font-weight: bold;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-
-table, th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #d32f2f;
-    color: white;
-    font-weight: bold;
-}
-
-td a {
-    color: #d32f2f;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-td a:hover {
-    text-decoration: underline;
 }
 
 /* Mensajes flash */
@@ -124,34 +113,55 @@ td a:hover {
     color: #0c5460;
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 15px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
+/* Estilos para el modal de confirmación */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
-@media (max-width: 480px) {
-    h2 {
-        font-size: 18px;
-    }
-
-    button {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-
-    table {
-        font-size: 12px;
-    }
+.modal-content {
+    background-color: #ffffff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    border-radius: 8px;
 }
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.modal button:hover {
+    background-color: #b71c1c;
+}
+

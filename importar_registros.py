@@ -8,7 +8,7 @@ conexion = psycopg2.connect(
     host="localhost",
     database="alcaldia_datos",
     user="postgres",
-    password="1234"  # Asegúrate de colocar tu contraseña
+    password="daniel"  # Usa la contraseña correcta
 )
 conexion.autocommit = True
 
@@ -35,13 +35,13 @@ consulta_insercion = sql.SQL("""
 # Consulta para verificar duplicados
 consulta_verificar = sql.SQL("SELECT 1 FROM registro_personal WHERE identificacion = %s")
 
-# Truncar valores para que encajen en el límite de las columnas
+# Función para truncar valores para que encajen en el límite de las columnas
 def truncar(valor, limite):
     if isinstance(valor, str) and len(valor) > limite:
         return valor[:limite]
     return valor
 
-# Convertir a fecha si es posible; de lo contrario, devolver None
+# Función para convertir a fecha si es posible; de lo contrario, devolver None
 def convertir_fecha(fecha):
     try:
         fecha_convertida = pd.to_datetime(fecha, errors='coerce')
@@ -75,10 +75,10 @@ with conexion:
                 'telefono': truncar(fila.get('TELEFONO', None), 20),
                 'perfil': truncar(fila.get('PERFIL', None), 120),
                 'hv': truncar(fila.get('HV', None), 255),
-                'area': None,  # Campo desplegable
-                'subgrupo': None,  # Campo desplegable
-                'rol': None,  # Campo desplegable
-                'riesgo': None  # Campo desplegable
+                'area': truncar(fila.get('AREA', None), 100),
+                'subgrupo': truncar(fila.get('SUBGRUPO', None), 100),
+                'rol': truncar(fila.get('ROL', None), 100),
+                'riesgo': truncar(fila.get('RIESGO', None), 100)
             }
 
             try:

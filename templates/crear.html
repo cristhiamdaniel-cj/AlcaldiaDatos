@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Crear Registro</title>
+    <title>Crear Nuevo Registro - Alcaldía Local de Kennedy</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -11,7 +11,8 @@
     </header>
     <div class="container">
         <h2>Formulario de Registro</h2>
-        <form action="{{ url_for('crear_registro') }}" method="post">
+        <form action="{{ url_for('crear_registro') }}" method="post" onsubmit="showModal(event)">
+            <!-- Campos del formulario -->
             <label for="apellido_paterno">Apellido Paterno:</label>
             <input type="text" id="apellido_paterno" name="apellido_paterno" required>
 
@@ -33,72 +34,120 @@
             <label for="perfil">Perfil:</label>
             <input type="text" id="perfil" name="perfil">
 
-            <label for="hv">HV (Enlace):</label>
+            <label for="hv">Enlace HV:</label>
             <input type="url" id="hv" name="hv">
 
+            <!-- Lista desplegable para Área -->
             <label for="area">Área:</label>
-            <select id="area" name="area" required>
-                <option value="">Seleccione un Área</option>
+            <select id="area" name="area" required onchange="updateSubgrupoOptions()">
+                <option value="">Seleccione un área</option>
                 <option value="Despacho">Despacho</option>
                 <option value="Desarrollo Administrativo y Financiero">Desarrollo Administrativo y Financiero</option>
                 <option value="Gestión Policiva y Jurídica">Gestión Policiva y Jurídica</option>
                 <option value="Inspecciones de Policía">Inspecciones de Policía</option>
             </select>
 
+            <!-- Lista desplegable para Subgrupo, dependiente de Área -->
             <label for="subgrupo">Subgrupo:</label>
             <select id="subgrupo" name="subgrupo" required>
-                <option value="">Seleccione un Subgrupo</option>
-                <!-- Subgrupos dependientes del área seleccionada -->
+                <option value="">Seleccione un subgrupo</option>
             </select>
 
+            <!-- Lista desplegable para Rol -->
             <label for="rol">Rol:</label>
             <select id="rol" name="rol" required>
-                <option value="">Seleccione un Rol</option>
+                <option value="">Seleccione un rol</option>
                 <option value="Auxiliar">Auxiliar</option>
                 <option value="Notificador">Notificador</option>
                 <option value="Primaria">Primaria</option>
                 <option value="Profesional Especializado">Profesional Especializado</option>
                 <option value="Profesional Universitario">Profesional Universitario</option>
-                <option value="Técnico">Técnico</option>
+                <option value="Tecnico">Técnico</option>
                 <option value="Transporte - Liviano">Transporte - Liviano</option>
                 <option value="Transporte - Pesado">Transporte - Pesado</option>
             </select>
 
+            <!-- Lista desplegable para Riesgo -->
             <label for="riesgo">Riesgo:</label>
-            <input type="text" id="riesgo" name="riesgo">
+            <select id="riesgo" name="riesgo" required>
+                <option value="">Seleccione el nivel de riesgo</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
 
             <button type="submit">Guardar Registro</button>
+            <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
         </form>
-
-        <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
     </div>
 
-    <script>
-        // Script para actualizar las opciones de subgrupo en función del área seleccionada
-        document.addEventListener("DOMContentLoaded", function () {
-            const areaSelect = document.getElementById("area");
-            const subgrupoSelect = document.getElementById("subgrupo");
+    <!-- Modal de Confirmación -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>El registro ha sido creado exitosamente.</p>
+            <button onclick="redirectToHome()">Aceptar</button>
+        </div>
+    </div>
 
-            const jerarquia = {
-                "Despacho": ["1.01 Despacho", "1.02 Desarrollo Estratégico y Mejora", "1.03 Jurídica"],
-                "Desarrollo Administrativo y Financiero": ["2.01 Coordinación Administrativa", "2.02 PIGA"],
-                "Gestión Policiva y Jurídica": ["3.1 Coordinación Policiva", "3.2 Actuaciones Administrativas"],
-                "Inspecciones de Policía": ["4.1 Coordinación", "4.2 Inspección - 8A", "4.2 Inspección - 8B"]
+    <!-- JavaScript para manejar el modal y el formulario dependiente -->
+    <script>
+        // Función para mostrar el modal
+        function showModal(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('confirmationModal').style.display = 'block';
+                } else {
+                    alert('Ocurrió un error al guardar el registro.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        // Función para redirigir al menú principal
+        function redirectToHome() {
+            window.location.href = "{{ url_for('home') }}";
+        }
+
+        // Función para actualizar opciones de subgrupo basadas en el área seleccionada
+        function updateSubgrupoOptions() {
+            const area = document.getElementById('area').value;
+            const subgrupo = document.getElementById('subgrupo');
+            subgrupo.innerHTML = '<option value="">Seleccione un subgrupo</option>';
+
+            const options = {
+                "Despacho": ["Despacho", "Desarrollo Estrategico y Mejora", "Jurídica", "Relacionamiento interinstitucional", "Comunicaciones"],
+                "Desarrollo Administrativo y Financiero": ["Coordinación Administrativa y Financiera", "PIGA", "Servicios Generales y funcionamiento", "CDI y Atención al Usuario", "CPS y Planta", "TIC", "Gestión Documental", "Almacén", "Presupuesto", "Contabilidad"],
+                "Gestión Policiva y Jurídica": ["Coordinación Policiva", "Actuaciones Administrativas", "Hechos Notorios", "Cobro Persuasivo", "Calle - Ambiente", "Calle - Seguridad", "Calle - Espacio Público", "Calle - Riesgos", "Calle - Seguridad - Gestor", "Kennedy a la Medida", "Demandas Mi casa me pertenece"],
+                "Inspecciones de Policía": ["Coordinación", "Inspección - 8A", "Inspección - 8B", "Inspección - 8C", "Inspección - 8D", "Inspección - 8E", "Inspección - 8F", "Inspección - 8G"]
             };
 
-            areaSelect.addEventListener("change", function () {
-                const area = areaSelect.value;
-                const subgrupos = jerarquia[area] || [];
-
-                subgrupoSelect.innerHTML = "<option value=''>Seleccione un Subgrupo</option>";
-                subgrupos.forEach(subgrupo => {
-                    const option = document.createElement("option");
-                    option.value = subgrupo;
-                    option.textContent = subgrupo;
-                    subgrupoSelect.appendChild(option);
+            if (options[area]) {
+                options[area].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    subgrupo.appendChild(option);
                 });
-            });
-        });
+            }
+        }
     </script>
 </body>
 </html>
