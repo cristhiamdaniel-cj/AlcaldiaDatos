@@ -186,20 +186,26 @@ def actualizar_registro():
         campo = request.form['campo']
         nuevo_valor = request.form['nuevo_valor']
 
-        conexion = psycopg2.connect(
-            host="localhost",
-            database="alcaldia_datos",
-            user="postgres",
-            password="daniel"
-        )
-        cursor = conexion.cursor()
-        consulta = f"UPDATE registro_personal SET {campo} = %s WHERE identificacion = %s"
-        cursor.execute(consulta, (nuevo_valor, identificacion))
-        conexion.commit()
-        conexion.close()
+        try:
+            # Conexión a la base de datos
+            conexion = psycopg2.connect(
+                host="localhost",
+                database="alcaldia_datos",
+                user="postgres",
+                password="daniel"
+            )
+            cursor = conexion.cursor()
+            consulta = f"UPDATE registro_personal SET {campo} = %s WHERE identificacion = %s"
+            cursor.execute(consulta, (nuevo_valor, identificacion))
+            conexion.commit()
+            conexion.close()
 
-        flash('Registro actualizado exitosamente', 'success')
-        return redirect(url_for('ver_registros'))
+            # Enviar respuesta JSON de éxito
+            return jsonify({"success": True, "message": "Registro actualizado exitosamente."})
+        except Exception as e:
+            print("Error al actualizar registro:", e)
+            return jsonify({"success": False, "message": "Ocurrió un error al actualizar el registro."}), 500
+
     return render_template('actualizar.html')
 
 # Ruta para eliminar un registro (solo accesible para superadmin)

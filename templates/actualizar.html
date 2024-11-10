@@ -4,6 +4,64 @@
     <meta charset="UTF-8">
     <title>Actualizar Registro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Función para cambiar el tipo de campo basado en la selección
+        function actualizarCampoSeleccionado() {
+            const campoSelect = document.getElementById('campo');
+            const valorInput = document.getElementById('nuevo_valor');
+            const areaSelect = document.getElementById('area_select');
+            const subgrupoSelect = document.getElementById('subgrupo_select');
+            const rolSelect = document.getElementById('rol_select');
+            const riesgoSelect = document.getElementById('riesgo_select');
+
+            valorInput.style.display = 'none';
+            areaSelect.style.display = 'none';
+            subgrupoSelect.style.display = 'none';
+            rolSelect.style.display = 'none';
+            riesgoSelect.style.display = 'none';
+
+            switch (campoSelect.value) {
+                case 'area':
+                    areaSelect.style.display = 'block';
+                    break;
+                case 'subgrupo':
+                    subgrupoSelect.style.display = 'block';
+                    break;
+                case 'rol':
+                    rolSelect.style.display = 'block';
+                    break;
+                case 'riesgo':
+                    riesgoSelect.style.display = 'block';
+                    break;
+                default:
+                    valorInput.style.display = 'block';
+                    break;
+            }
+        }
+
+        // Función para enviar el formulario mediante AJAX
+        function enviarFormulario(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Mostrar mensaje de éxito
+                } else {
+                    alert(data.message); // Mostrar mensaje de error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Ocurrió un error inesperado.");
+            });
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -11,22 +69,62 @@
     </header>
     <div class="container">
         <h2>Actualizar Información</h2>
-        <form action="{{ url_for('actualizar_registro') }}" method="post">
+        <form action="{{ url_for('actualizar_registro') }}" method="post" onsubmit="enviarFormulario(event)">
             <label for="identificacion">Identificación:</label>
             <input type="text" id="identificacion" name="identificacion" required>
 
             <label for="campo">Campo a Actualizar:</label>
-            <select id="campo" name="campo" required>
+            <select id="campo" name="campo" onchange="actualizarCampoSeleccionado()" required>
                 <option value="apellido_paterno">Apellido Paterno</option>
                 <option value="apellido_materno">Apellido Materno</option>
                 <option value="nombres">Nombres</option>
                 <option value="telefono">Teléfono</option>
                 <option value="perfil">Perfil</option>
-                <!-- Agrega más campos si es necesario -->
+                <option value="hv">Enlace HV</option>
+                <option value="area">Área</option>
+                <option value="subgrupo">Subgrupo</option>
+                <option value="rol">Rol</option>
+                <option value="riesgo">Riesgo</option>
             </select>
 
-            <label for="nuevo_valor">Nuevo Valor:</label>
-            <input type="text" id="nuevo_valor" name="nuevo_valor" required>
+            <input type="text" id="nuevo_valor" name="nuevo_valor" style="display: block;" placeholder="Nuevo valor">
+
+            <select id="area_select" name="nuevo_valor" style="display: none;">
+                <option value="">Seleccione un área</option>
+                <option value="Despacho">Despacho</option>
+                <option value="Desarrollo Administrativo y Financiero">Desarrollo Administrativo y Financiero</option>
+                <option value="Gestión Policiva y Jurídica">Gestión Policiva y Jurídica</option>
+                <option value="Inspecciones de Policía">Inspecciones de Policía</option>
+            </select>
+
+            <select id="subgrupo_select" name="nuevo_valor" style="display: none;">
+                <option value="">Seleccione un subgrupo</option>
+                <!-- Opciones de subgrupo dinámicas según el área seleccionada -->
+                <option value="Despacho">Despacho</option>
+                <option value="Desarrollo Estrategico y Mejora">Desarrollo Estrategico y Mejora</option>
+                <!-- Agrega aquí todas las opciones de subgrupo... -->
+            </select>
+
+            <select id="rol_select" name="nuevo_valor" style="display: none;">
+                <option value="">Seleccione un rol</option>
+                <option value="Auxiliar">Auxiliar</option>
+                <option value="Notificador">Notificador</option>
+                <option value="Primaria">Primaria</option>
+                <option value="Profesional Especializado">Profesional Especializado</option>
+                <option value="Profesional Universitario">Profesional Universitario</option>
+                <option value="Técnico">Técnico</option>
+                <option value="Transporte - Liviano">Transporte - Liviano</option>
+                <option value="Transporte - Pesado">Transporte - Pesado</option>
+            </select>
+
+            <select id="riesgo_select" name="nuevo_valor" style="display: none;">
+                <option value="">Seleccione el nivel de riesgo</option>
+                <option value="1">1 - Bajo</option>
+                <option value="2">2 - Medio-Bajo</option>
+                <option value="3">3 - Medio</option>
+                <option value="4">4 - Alto</option>
+                <option value="5">5 - Muy Alto</option>
+            </select>
 
             <button type="submit">Actualizar Registro</button>
             <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
