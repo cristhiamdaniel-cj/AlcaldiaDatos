@@ -115,7 +115,6 @@ def ver_registros():
 @app.route('/consultar', methods=['GET', 'POST'])
 @login_required(roles=["viewer", "editor", "administrador", "superadmin"])
 def consultar_registro():
-    registro = None
     if request.method == 'POST':
         identificacion = request.form['identificacion']
         conexion = psycopg2.connect(
@@ -129,10 +128,19 @@ def consultar_registro():
         registro = cursor.fetchone()
         conexion.close()
 
-        if not registro:
-            flash('No se encontró ningún registro con esa identificación', 'warning')
+        if registro:
+            columnas = ["id", "apellido_paterno", "apellido_materno", "nombres", "identificacion",
+                        "fecha_entrevista", "telefono", "perfil", "hv", "area", "subgrupo", "rol", "riesgo"]
+            registro_dict = dict(zip(columnas, registro))
+            return jsonify({"success": True, "registro": registro_dict})
+        else:
+            return jsonify({"success": False, "message": "No se encontró ningún registro con esa identificación"}), 404
 
-    return render_template('consultar.html', registro=registro)
+    return render_template('consultar.html')
+
+
+
+
 
 # Ruta para crear un nuevo registro (accesible para editor, administrador, y superadmin)
 @app.route('/crear', methods=['GET', 'POST'])
