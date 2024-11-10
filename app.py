@@ -217,12 +217,14 @@ def actualizar_registro():
     return render_template('actualizar.html')
 
 # Ruta para eliminar un registro (solo accesible para superadmin)
+# Ruta para eliminar un registro (solo accesible para superadmin)
 @app.route('/eliminar', methods=['GET', 'POST'])
 @login_required(roles=["superadmin"])
 def eliminar_registro():
     if request.method == 'POST':
         identificacion = request.form['identificacion']
 
+        # Conectar a la base de datos
         conexion = psycopg2.connect(
             host="localhost",
             database="alcaldia_datos",
@@ -230,14 +232,26 @@ def eliminar_registro():
             password="daniel"
         )
         cursor = conexion.cursor()
+        # Buscar el registro para confirmar su existencia antes de eliminarlo
+        cursor.execute("SELECT apellido_paterno, apellido_materno, nombres FROM registro_personal WHERE identificacion = %s", (identificacion,))
+        registro = cursor.fetchone()
+
+        if not registro:
+            # Si no se encuentra el registro, devolver un mensaje de error
+            conexion.close()
+            return jsonify({"success": False, "message": "No se encontró ningún registro con esa identificación"}), 404
+
+        # Eliminar el registro si existe
         cursor.execute("DELETE FROM registro_personal WHERE identificacion = %s", (identificacion,))
         conexion.commit()
         conexion.close()
 
-        flash('Registro eliminado exitosamente', 'success')
-        return redirect(url_for('ver_registros'))
+        nombre_completo = f"{registro[0]} {registro[1]} {registro[2]}"
+        return jsonify({"success": True, "message": f"Registro de {nombre_completo} eliminado exitosamente."})
 
+    # Renderizar el formulario de eliminación en la solicitud GET
     return render_template('eliminar.html')
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

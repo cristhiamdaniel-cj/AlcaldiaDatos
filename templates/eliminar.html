@@ -11,12 +11,50 @@
     </header>
     <div class="container">
         <h2>Confirmar Eliminación</h2>
-        <form action="{{ url_for('eliminar_registro') }}" method="post">
+        <form id="eliminarForm">
             <label for="identificacion">Identificación:</label>
             <input type="text" id="identificacion" name="identificacion" required>
             <button type="submit" class="button-danger">Eliminar</button>
         </form>
+
+        <div id="mensaje" style="display: none; margin-top: 10px;"></div>
         <a href="{{ url_for('home') }}" class="button">Volver al Menú Principal</a>
     </div>
+
+    <script>
+        document.getElementById('eliminarForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const identificacion = document.getElementById('identificacion').value;
+
+            // Confirmación antes de proceder
+            if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+                fetch("{{ url_for('eliminar_registro') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ 'identificacion': identificacion })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const mensajeDiv = document.getElementById('mensaje');
+                    if (data.success) {
+                        mensajeDiv.style.color = "green";
+                        mensajeDiv.innerText = data.message;
+                    } else {
+                        mensajeDiv.style.color = "red";
+                        mensajeDiv.innerText = data.message;
+                    }
+                    mensajeDiv.style.display = "block";
+                })
+                .catch(error => {
+                    const mensajeDiv = document.getElementById('mensaje');
+                    mensajeDiv.style.color = "red";
+                    mensajeDiv.innerText = "Ocurrió un error al intentar eliminar el registro.";
+                    mensajeDiv.style.display = "block";
+                });
+            }
+        });
+    </script>
 </body>
 </html>
