@@ -20,7 +20,7 @@ class Usuario(db.Model):
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
-# Inicialización de la base de datos y los usuarios con nuevos roles
+# Inicialización de la base de datos y los usuarios con roles especificados
 def inicializar_base_datos():
     with app.app_context():
         db.drop_all()  # Eliminar la tabla antes de recrearla para aplicar el cambio
@@ -28,16 +28,16 @@ def inicializar_base_datos():
         # Definición de usuarios con los roles especificados
         usuarios = [
             {'username': 'admin', 'password': 'admin123', 'email': 'admin@ejemplo.com', 'role': 'superadmin'},  # Acceso completo
-            {'username': 'manager', 'password': 'manager123', 'email': 'manager@ejemplo.com', 'role': 'admin'},  # Todo menos eliminar
-            {'username': 'editor', 'password': 'editor123', 'email': 'editor@ejemplo.com', 'role': 'editor'},    # Crear, ver y consultar
-            {'username': 'viewer', 'password': 'viewer123', 'email': 'viewer@ejemplo.com', 'role': 'viewer'},    # Solo consulta
+            {'username': 'user1', 'password': 'manager123', 'email': 'manager@ejemplo.com', 'role': 'administrador'},  # Todo menos eliminar
+            {'username': 'user2', 'password': 'editor123', 'email': 'editor@ejemplo.com', 'role': 'editor'},    # Crear, ver y consultar
+            {'username': 'user3', 'password': 'viewer123', 'email': 'viewer@ejemplo.com', 'role': 'viewer'}     # Solo consulta
         ]
 
-        # Insertar usuarios si no existen
+        # Insertar usuarios con contraseñas hasheadas
         for u in usuarios:
             if not Usuario.query.filter_by(username=u['username']).first():
                 usuario = Usuario(username=u['username'], email=u['email'], role=u['role'])
-                usuario.password_hash = u['password']  # Guardar contraseña directamente como texto plano para pruebas
+                usuario.set_password(u['password'])  # Hashear la contraseña
                 db.session.add(usuario)
 
         db.session.commit()

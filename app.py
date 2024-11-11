@@ -1,9 +1,7 @@
-import time
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
-import os
 
 # Configuración inicial de la aplicación Flask y base de datos
 app = Flask(__name__)
@@ -29,8 +27,12 @@ class Usuario(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# Decorador para verificar autenticación y permisos específicos de rol
 def login_required(roles=None):
+    """
+    Decorador para requerir autenticación y roles específicos para acceder a una ruta.
+    :param roles: Lista de roles permitidos para acceder a la ruta
+    :return: Función de envoltura para verificar la autenticación y los roles
+    """
     def decorator(func):
         def wrapper(*args, **kwargs):
             if 'user_id' not in session:
@@ -46,18 +48,27 @@ def login_required(roles=None):
         return wrapper
     return decorator
 
-# Ruta principal que redirige al login o al menú
+
 @app.route('/')
 def index():
+    """
+    Ruta principal que redirige al login si no hay una sesión activa, o al menú principal si el usuario
+    ya está autenticado.
+    :return: Redirección a la página de inicio de sesión o al menú principal
+    """
     if 'user_id' not in session:
         print("Redirigiendo a login desde index()")
         return redirect(url_for('login'))
     print("Usuario autenticado, redirigiendo a home desde index()")
     return redirect(url_for('home'))
 
-# Ruta de inicio de sesión
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Ruta para iniciar sesión en la aplicación.
+    :return: Página de inicio de sesión o redirección al menú principal si la autenticación es exitosa
+    """
     session.clear()  # Limpiar cualquier sesión previa al intentar iniciar sesión
     print("Sesión previa limpiada")
     if request.method == 'POST':
@@ -76,25 +87,37 @@ def login():
             flash('Usuario o contraseña incorrectos', 'danger')
     return render_template('login.html')
 
-# Ruta para el menú principal
+
 @app.route('/home')
 @login_required()
 def home():
+    """
+    Ruta para mostrar el menú principal para el usuario autenticado.
+    :return: Página de inicio con el menú principal
+    """
     print("Mostrando el menú principal para el usuario autenticado")
     return render_template('home.html')
 
-# Ruta para cerrar sesión
+
 @app.route('/logout')
 def logout():
+    """
+    Ruta para cerrar la sesión del usuario y redirigir al inicio de sesión.
+    :return: Redirección a la página de inicio de sesión
+    """
     session.clear()
     print("Sesión cerrada")
     flash('Sesión cerrada', 'info')
     return redirect(url_for('login'))
 
-# Ruta para ver registros (accesible para viewer, editor, administrador, y superadmin)
+
 @app.route('/ver_registros')
 @login_required(roles=["viewer", "editor", "administrador", "superadmin"])
 def ver_registros():
+    """
+    Ruta para ver los registros de personal almacenados en la base de datos.
+    :return: Página con la lista de registros de personal
+    """
     count = request.args.get('count', '10')
     query = "SELECT * FROM registro_personal" if count == 'all' else f"SELECT * FROM registro_personal LIMIT {count}"
 
@@ -111,10 +134,14 @@ def ver_registros():
 
     return render_template('ver_registros.html', registros=registros, count=count)
 
-# Ruta para consultar un registro por identificación (accesible para viewer, editor, administrador, y superadmin)
+
 @app.route('/consultar', methods=['GET', 'POST'])
 @login_required(roles=["viewer", "editor", "administrador", "superadmin"])
 def consultar_registro():
+    """
+    Ruta para consultar un registro de personal por su identificación.
+    :return: Página para consultar un registro o respuesta JSON con el registro encontrado
+    """
     if request.method == 'POST':
         identificacion = request.form['identificacion']
         conexion = psycopg2.connect(
@@ -139,13 +166,13 @@ def consultar_registro():
     return render_template('consultar.html')
 
 
-
-
-
-# Ruta para crear un nuevo registro (accesible para editor, administrador, y superadmin)
 @app.route('/crear', methods=['GET', 'POST'])
 @login_required(roles=["editor", "administrador", "superadmin"])
 def crear_registro():
+    """
+    Ruta para crear un nuevo registro de personal en la base de datos.
+    :return: Página para crear un registro o respuesta JSON con el resultado de la operación
+    """
     if request.method == 'POST':
         # Extraer los datos del formulario
         apellido_paterno = request.form['apellido_paterno']
@@ -171,10 +198,12 @@ def crear_registro():
             )
             cursor = conexion.cursor()
             consulta = """
-            INSERT INTO registro_personal (apellido_paterno, apellido_materno, nombres, identificacion, fecha_entrevista, telefono, perfil, hv, area, subgrupo, rol, riesgo)
+            INSERT INTO registro_personal (apellido_paterno, apellido_materno, nombres, identificacion, 
+            fecha_entrevista, telefono, perfil, hv, area, subgrupo, rol, riesgo)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(consulta, (apellido_paterno, apellido_materno, nombres, identificacion, fecha_entrevista, telefono, perfil, hv, area, subgrupo, rol, riesgo))
+            cursor.execute(consulta, (apellido_paterno, apellido_materno, nombres, identificacion,
+                                      fecha_entrevista, telefono, perfil, hv, area, subgrupo, rol, riesgo))
             conexion.commit()
             conexion.close()
             return jsonify(success=True)  # Respuesta JSON para éxito
@@ -185,10 +214,13 @@ def crear_registro():
     return render_template('crear.html')
 
 
-# Ruta para actualizar un registro (accesible para administrador y superadmin)
 @app.route('/actualizar', methods=['GET', 'POST'])
 @login_required(roles=["administrador", "superadmin"])
 def actualizar_registro():
+    """
+    Ruta para actualizar un registro de personal en la base de datos.
+    :return: Página para actualizar un registro o respuesta JSON con el resultado de la operación
+    """
     if request.method == 'POST':
         identificacion = request.form['identificacion']
         campo = request.form['campo']
@@ -216,11 +248,14 @@ def actualizar_registro():
 
     return render_template('actualizar.html')
 
-# Ruta para eliminar un registro (solo accesible para superadmin)
-# Ruta para eliminar un registro (solo accesible para superadmin)
+
 @app.route('/eliminar', methods=['GET', 'POST'])
 @login_required(roles=["superadmin"])
 def eliminar_registro():
+    """
+    Ruta para eliminar un registro de personal en la base de datos.
+    :return: Página para eliminar un registro o respuesta JSON con el resultado de la operación
+    """
     if request.method == 'POST':
         identificacion = request.form['identificacion']
 
@@ -233,7 +268,8 @@ def eliminar_registro():
         )
         cursor = conexion.cursor()
         # Buscar el registro para confirmar su existencia antes de eliminarlo
-        cursor.execute("SELECT apellido_paterno, apellido_materno, nombres FROM registro_personal WHERE identificacion = %s", (identificacion,))
+        cursor.execute("SELECT apellido_paterno, apellido_materno, nombres FROM registro_personal "
+                       "WHERE identificacion = %s", (identificacion,))
         registro = cursor.fetchone()
 
         if not registro:
