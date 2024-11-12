@@ -1,0 +1,19 @@
+ Registro de Actividades de Auditoría 
+==========================================================================================
+ID    | Usuario         | Email                     | Rol             | Acción                         | Timestamp (Hora Local)
+==========================================================================================
+1     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-11 20:45:13.912466
+2     | danielamaz      | dannymgsj@gmail.com       | administrador   | Ver registros                  | 2024-11-11 20:45:16.260101
+3     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-11 20:46:20.773414
+4     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-11 20:46:25.893297
+5     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-11 20:46:29.843517
+6     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-11 20:47:39.650193
+7     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Consultar registro con identif | 2024-11-11 20:47:51.370309
+8     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Crear registro                 | 2024-11-11 20:50:49.366585
+9     | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Consultar registro con identif | 2024-11-11 20:50:59.085724
+10    | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Actualizar registro con identi | 2024-11-11 20:52:35.785294
+11    | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Consultar registro con identif | 2024-11-11 20:52:44.659364
+12    | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-12 09:53:17.800989
+13    | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Ver registros                  | 2024-11-12 09:54:22.893171
+14    | danielcampos    | cdaniel_cj@hotmail.com    | superadmin      | Consultar registro con identif | 2024-11-12 09:54:35.431513
+==========================================================================================

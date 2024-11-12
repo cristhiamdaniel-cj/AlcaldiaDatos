@@ -2,6 +2,26 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
+from datetime import datetime
+
+# Función para registrar la acción de un usuario
+def registrar_actividad(usuario_id, accion):
+    with app.app_context():
+        conexion = psycopg2.connect(
+            host="localhost",
+            database="alcaldia_datos",
+            user="postgres",
+            password="daniel"
+        )
+        cursor = conexion.cursor()
+        cursor.execute(
+            "INSERT INTO auditoria_actividades (usuario_id, accion, timestamp) VALUES (%s, %s, %s)",
+            (usuario_id, accion, datetime.now())
+        )
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+
 
 # Configuración inicial de la aplicación Flask y base de datos
 app = Flask(__name__)
@@ -118,6 +138,9 @@ def ver_registros():
     Ruta para ver los registros de personal almacenados en la base de datos.
     :return: Página con la lista de registros de personal
     """
+    usuario_id = session.get('user_id')
+    registrar_actividad(usuario_id, "Ver registros")
+
     count = request.args.get('count', '10')
     query = "SELECT * FROM registro_personal" if count == 'all' else f"SELECT * FROM registro_personal LIMIT {count}"
 
@@ -143,7 +166,10 @@ def consultar_registro():
     :return: Página para consultar un registro o respuesta JSON con el registro encontrado
     """
     if request.method == 'POST':
+        usuario_id = session.get('user_id')
         identificacion = request.form['identificacion']
+        registrar_actividad(usuario_id, f"Consultar registro con identificación {identificacion}")
+
         conexion = psycopg2.connect(
             host="localhost",
             database="alcaldia_datos",
@@ -174,6 +200,8 @@ def crear_registro():
     :return: Página para crear un registro o respuesta JSON con el resultado de la operación
     """
     if request.method == 'POST':
+        usuario_id = session.get('user_id')
+        registrar_actividad(usuario_id, "Crear registro")
         # Extraer los datos del formulario
         apellido_paterno = request.form['apellido_paterno']
         apellido_materno = request.form['apellido_materno']
@@ -222,9 +250,11 @@ def actualizar_registro():
     :return: Página para actualizar un registro o respuesta JSON con el resultado de la operación
     """
     if request.method == 'POST':
+        usuario_id = session.get('user_id')
         identificacion = request.form['identificacion']
         campo = request.form['campo']
         nuevo_valor = request.form['nuevo_valor']
+        registrar_actividad(usuario_id, f"Actualizar registro con identificación {identificacion}, campo {campo}")
 
         try:
             # Conexión a la base de datos
@@ -257,7 +287,9 @@ def eliminar_registro():
     :return: Página para eliminar un registro o respuesta JSON con el resultado de la operación
     """
     if request.method == 'POST':
+        usuario_id = session.get('user_id')
         identificacion = request.form['identificacion']
+        registrar_actividad(usuario_id, f"Eliminar registro con identificación {identificacion}")
 
         # Conectar a la base de datos
         conexion = psycopg2.connect(

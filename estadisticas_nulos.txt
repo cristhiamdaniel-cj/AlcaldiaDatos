@@ -1,0 +1,15 @@
+Estadísticas de campos nulos en la tabla 'registro_personal'
+==================================================
+id: 0 nulos
+apellido_paterno: 1 nulos
+apellido_materno: 11 nulos
+nombres: 9 nulos
+identificacion: 0 nulos
+fecha_entrevista: 148 nulos
+telefono: 8 nulos
+perfil: 177 nulos
+hv: 260 nulos
+area: 335 nulos
+subgrupo: 420 nulos
+rol: 421 nulos
+riesgo: 427 nulos
